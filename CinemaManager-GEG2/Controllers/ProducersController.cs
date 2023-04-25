@@ -16,6 +16,11 @@ namespace CinemaManager_GEG2.Controllers
         {
             return View(ctx.Producers.ToList());
         }
+        public ActionResult ProdsAndTheirMovies()
+        {
+            var movies = ctx.Movies.ToList();
+            return View(ctx.Producers.ToList());
+        }
 
         // GET: ProducersController/Details/5
         public ActionResult Details(int id)

@@ -24,6 +24,12 @@ namespace CinemaManager_GEG2.Controllers
             var cinemaDbGeg2Context = _context.Movies.Include(m => m.Producer);
             return View(await cinemaDbGeg2Context.ToListAsync());
         }
+        
+        public async Task<IActionResult> MoviesAndTheirProds()
+        {
+            var cinemaDbGeg2Context = _context.Movies.Include(m => m.Producer);
+            return View(await cinemaDbGeg2Context.ToListAsync());
+        }
 
         // GET: Movies/Details/5
         public async Task<IActionResult> Details(int? id)
