@@ -20,7 +20,7 @@ namespace CinemaManager_GEG2.Controllers
         // GET: ProducersController/Details/5
         public ActionResult Details(int id)
         {
-            return View();
+            return View(ctx.Producers.Find(id));
         }
 
         // GET: ProducersController/Create
@@ -55,10 +55,12 @@ namespace CinemaManager_GEG2.Controllers
         // POST: ProducersController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public ActionResult Edit(int id,Producer p)
         {
             try
             {
+                ctx.Producers.Update(p);
+                ctx.SaveChanges();
                 return RedirectToAction(nameof(Index));
             }
             catch
@@ -70,16 +72,18 @@ namespace CinemaManager_GEG2.Controllers
         // GET: ProducersController/Delete/5
         public ActionResult Delete(int id)
         {
-            return View();
+            return View(ctx.Producers.Find(id));
         }
 
         // POST: ProducersController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public ActionResult Delete(int id, IFormCollection collection, Producer p)
         {
             try
             {
+                ctx.Producers.Remove(p);
+                ctx.SaveChanges();
                 return RedirectToAction(nameof(Index));
             }
             catch
