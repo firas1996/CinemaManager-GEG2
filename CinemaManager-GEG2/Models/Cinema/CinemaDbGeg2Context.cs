@@ -15,13 +15,30 @@ public partial class CinemaDbGeg2Context : DbContext
     {
     }
 
+    public virtual DbSet<Movie> Movies { get; set; }
+
     public virtual DbSet<Producer> Producers { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        => optionsBuilder.UseSqlServer("Name=ConnectionStrings:CinemaCS");
+        => optionsBuilder.UseSqlServer("Name=ConnectionStrings:CinemaCs");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.Entity<Movie>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK__Movie__3214EC07B5D91F63");
+
+            entity.ToTable("Movie");
+
+            entity.Property(e => e.Genre).HasMaxLength(20);
+            entity.Property(e => e.Title).HasMaxLength(30);
+
+            entity.HasOne(d => d.Producer).WithMany(p => p.Movies)
+                .HasForeignKey(d => d.ProducerId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Movie_Prod");
+        });
+
         modelBuilder.Entity<Producer>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PK__Producer__3214EC07E9E0219E");
