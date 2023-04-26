@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using CinemaManager_GEG2.Models.Cinema;
+using CinemaManager_GEG2.Models.ViewModels;
 
 namespace CinemaManager_GEG2.Controllers
 {
@@ -29,6 +30,30 @@ namespace CinemaManager_GEG2.Controllers
         {
             var cinemaDbGeg2Context = _context.Movies.Include(m => m.Producer);
             return View(await cinemaDbGeg2Context.ToListAsync());
+        }
+
+        public IActionResult MoviesAndTheirProds_UsingModel()
+        {
+            var movies = _context.Movies.ToList();
+            var prods = _context.Producers.ToList();
+            var res = from m in movies
+                      join p in prods on m.ProducerId equals p.Id
+                      select new ProdMovie
+                      {
+                          mGenre = m.Genre,
+                          mTitle = m.Title,
+                          pName = p.Name,
+                          pNat = p.Nationality
+                      };
+            return View(res.ToList());
+        }
+
+        public IActionResult SearchByTitle(string title)
+        {
+            var movies = _context.Movies.ToList();
+            var querry = from m in movies where m.Title.Contains(title) select m;
+            var querry2 = _context.Movies.Where(m=> m.Title.Contains(title));
+            return View(querry2.ToList());
         }
 
         // GET: Movies/Details/5

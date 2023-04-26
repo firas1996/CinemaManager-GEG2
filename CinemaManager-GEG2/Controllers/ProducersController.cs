@@ -1,6 +1,8 @@
 ﻿using CinemaManager_GEG2.Models.Cinema;
+using CinemaManager_GEG2.Models.ViewModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace CinemaManager_GEG2.Controllers
 {
@@ -20,6 +22,27 @@ namespace CinemaManager_GEG2.Controllers
         {
             var movies = ctx.Movies.ToList();
             return View(ctx.Producers.ToList());
+        }
+
+        public IActionResult ProdsAndTheirMovies_UsingModel()
+        {
+            var movies = ctx.Movies.ToList();
+            var prods = ctx.Producers.ToList();
+            var res = from m in movies
+                      join p in prods on m.ProducerId equals p.Id
+                      select new ProdMovie
+                      {
+                          mGenre = m.Genre,
+                          mTitle = m.Title,
+                          pName = p.Name,
+                          pNat = p.Nationality
+                      };
+            return View(res.ToList());
+        }
+
+        public IActionResult MyMovies(int id)
+        {
+            return View(ctx.Movies.Where(x=>x.ProducerId == id).ToList());
         }
 
         // GET: ProducersController/Details/5

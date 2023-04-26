@@ -1,0 +1,12 @@
+﻿
+@{
+    ViewData["Title"] = "MoviesAndTheirProds_UsingModel";
+}
+
+<h1>MoviesAndTheirProds_UsingModel</h1>
+
+@foreach(var item in Model)
+{
+    <h3>@item.mTitle || @item.mGenre || @item.pName || @item.pNat</h3>
+}
+
